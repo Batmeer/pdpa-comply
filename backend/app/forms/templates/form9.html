@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Form 9 — Data Protection Impact Assessment — PDPC</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 20mm 18mm;
+    @bottom-center {
+      content: "Form 9 · DPIA · PDPA Cap 44 · GN 449C Reg 33 · Page " counter(page) " of " counter(pages);
+      font-size: 8pt;
+      color: #666;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #1a1a1a; line-height: 1.5; }
+
+  .header { text-align: center; border-bottom: 3px solid #0d7c7c; padding-bottom: 10px; margin-bottom: 16px; }
+  .header .authority { font-size: 8pt; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+  .header h1 { font-size: 16pt; font-weight: 700; color: #0d7c7c; margin: 4px 0 2px; }
+  .header .subtitle { font-size: 9pt; color: #444; }
+  .header .ref { font-size: 8pt; color: #777; margin-top: 4px; }
+
+  .section { margin-bottom: 14px; }
+  .section-title {
+    background: #0d7c7c;
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 700;
+    padding: 4px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  table.form-table { width: 100%; border-collapse: collapse; }
+  table.form-table td { border: 1px solid #ccc; padding: 5px 8px; vertical-align: top; }
+  table.form-table td.label { width: 38%; background: #f5f5f5; font-weight: 600; font-size: 8.5pt; color: #333; }
+  table.form-table td.value { font-size: 9pt; }
+
+  .text-area-box {
+    border: 1px solid #ccc;
+    min-height: 40px;
+    padding: 6px 8px;
+    font-size: 9pt;
+    color: #1a1a1a;
+    background: #fff;
+    margin-bottom: 2px;
+  }
+  .text-area-empty {
+    border: 1px dashed #ccc;
+    min-height: 40px;
+    padding: 6px 8px;
+    color: #aaa;
+    font-style: italic;
+    font-size: 8.5pt;
+    background: #fafafa;
+  }
+
+  .trigger-list { list-style: none; padding: 0; }
+  .trigger-list li { padding: 2px 0; font-size: 9pt; }
+  .trigger-list li::before { content: "▶ "; color: #0d7c7c; font-size: 8pt; }
+
+  .status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 9pt;
+    color: #fff;
+  }
+  .status-approved { background: #1a7c4b; }
+  .status-pending { background: #c97a00; }
+  .status-incomplete { background: #888; }
+
+  .declaration {
+    border: 1px solid #bbb;
+    padding: 10px 12px;
+    font-size: 8.5pt;
+    color: #333;
+    margin-top: 14px;
+    background: #fafafa;
+  }
+  .sig-line { border-top: 1px solid #444; margin-top: 28px; padding-top: 4px; font-size: 8pt; color: #555; }
+  .notice { font-size: 7.5pt; color: #666; margin-top: 14px; border-top: 1px solid #ddd; padding-top: 8px; }
+
+  .page-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<div class="header">
+  <div class="authority">United Republic of Tanzania</div>
+  <div class="authority">Personal Data Protection Commission (PDPC)</div>
+  <h1>FORM 9</h1>
+  <div class="subtitle">Data Protection Impact Assessment (DPIA)</div>
+  <div class="ref">Personal Data Protection Act, Cap. 44 · GN 449C, Regulation 33 &amp; First Schedule</div>
+</div>
+
+<!-- ─── PART A: ORGANISATION ─── -->
+<div class="section">
+  <div class="section-title">Part A — Organisation Details</div>
+  <table class="form-table">
+    <tr>
+      <td class="label">Organisation Name</td>
+      <td class="value">{{ org.name }}</td>
+    </tr>
+    <tr>
+      <td class="label">Sector</td>
+      <td class="value">{{ org.sector }}</td>
+    </tr>
+    <tr>
+      <td class="label">Assessment ID</td>
+      <td class="value">#{{ assessment.id }}</td>
+    </tr>
+    <tr>
+      <td class="label">Assessment Date</td>
+      <td class="value">{{ assessment.generated_at.strftime('%d %B %Y') }}</td>
+    </tr>
+    <tr>
+      <td class="label">Compliance Score</td>
+      <td class="value">{{ assessment.score }}% — {{ assessment.maturity }}</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ─── PART B: DPIA TRIGGERS ─── -->
+<div class="section">
+  <div class="section-title">Part B — DPIA Triggers (Reg 33(2))</div>
+  <table class="form-table">
+    <tr>
+      <td class="label">Applicable Triggers</td>
+      <td class="value">
+        {% if dpia_triggers %}
+          <ul class="trigger-list">
+            {% for t in dpia_triggers %}<li>{{ t }}</li>{% endfor %}
+          </ul>
+        {% else %}
+          <span style="color:#c0392b;">No triggers identified — DPIA may not be required. Verify against Reg 33(2).</span>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Automated Decision-Making</td>
+      <td class="value">{{ "Yes" if org.uses_automated_decisions else "No" }}</td>
+    </tr>
+    <tr>
+      <td class="label">Sensitive Personal Data</td>
+      <td class="value">{{ "Yes" if org.processes_sensitive_data else "No" }}</td>
+    </tr>
+    <tr>
+      <td class="label">Children's Data</td>
+      <td class="value">{{ "Yes" if org.processes_children_data else "No" }}</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ─── PART C: PROCESSING DESCRIPTION ─── -->
+<div class="section">
+  <div class="section-title">Part C — Description of Processing Activity</div>
+  {% if dpia and dpia.description %}
+    <div class="text-area-box">{{ dpia.description }}</div>
+  {% else %}
+    <div class="text-area-empty">Not yet completed — describe the nature, scope, context and purposes of the processing.</div>
+  {% endif %}
+</div>
+
+<!-- ─── PART D: NECESSITY & PROPORTIONALITY ─── -->
+<div class="section">
+  <div class="section-title">Part D — Necessity &amp; Proportionality Assessment</div>
+  {% if dpia and dpia.necessity_proportionality %}
+    <div class="text-area-box">{{ dpia.necessity_proportionality }}</div>
+  {% else %}
+    <div class="text-area-empty">Not yet completed — explain why the processing is necessary and proportionate to the legitimate aim pursued.</div>
+  {% endif %}
+</div>
+
+<!-- ─── PART E: RISK IDENTIFICATION ─── -->
+<div class="section page-break">
+  <div class="section-title">Part E — Risk Identification</div>
+  {% if dpia and dpia.risk_identification %}
+    <table class="form-table">
+      <tr>
+        <td class="label" style="width: 30%;">Risk</td>
+        <td class="label" style="width: 15%;">Likelihood</td>
+        <td class="label" style="width: 15%;">Severity</td>
+        <td class="label" style="width: 40%;">Description</td>
+      </tr>
+      {% for risk in dpia.risk_identification.get('risks', []) %}
+      <tr>
+        <td class="value">{{ risk.get('name', '') }}</td>
+        <td class="value">{{ risk.get('likelihood', '') }}</td>
+        <td class="value">{{ risk.get('severity', '') }}</td>
+        <td class="value">{{ risk.get('description', '') }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4" class="value" style="color:#888; font-style:italic;">No risks recorded.</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="text-area-empty">Not yet completed — identify risks to data subjects arising from the processing.</div>
+  {% endif %}
+</div>
+
+<!-- ─── PART F: MITIGATION ─── -->
+<div class="section">
+  <div class="section-title">Part F — Mitigation Measures</div>
+  {% if dpia and dpia.mitigation_measures %}
+    <table class="form-table">
+      <tr>
+        <td class="label" style="width: 40%;">Measure</td>
+        <td class="label" style="width: 30%;">Addresses Risk</td>
+        <td class="label" style="width: 30%;">Responsible Party</td>
+      </tr>
+      {% for m in dpia.mitigation_measures.get('measures', []) %}
+      <tr>
+        <td class="value">{{ m.get('measure', '') }}</td>
+        <td class="value">{{ m.get('addresses', '') }}</td>
+        <td class="value">{{ m.get('owner', '') }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="3" class="value" style="color:#888; font-style:italic;">No measures recorded.</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="text-area-empty">Not yet completed — describe measures taken to mitigate identified risks.</div>
+  {% endif %}
+</div>
+
+<!-- ─── PART G: DPO REVIEW ─── -->
+<div class="section">
+  <div class="section-title">Part G — Data Protection Officer Review</div>
+  {% if dpia and dpia.dpo_review %}
+    <div class="text-area-box">{{ dpia.dpo_review }}</div>
+  {% else %}
+    <div class="text-area-empty">Awaiting DPO review comments.</div>
+  {% endif %}
+</div>
+
+<!-- ─── PART H: APPROVAL ─── -->
+<div class="section">
+  <div class="section-title">Part H — Approval Status</div>
+  <table class="form-table">
+    <tr>
+      <td class="label">Status</td>
+      <td class="value">
+        {% if dpia and dpia.approved %}
+          <span class="status-badge status-approved">Approved</span>
+        {% elif dpia %}
+          <span class="status-badge status-pending">Pending Approval</span>
+        {% else %}
+          <span class="status-badge status-incomplete">DPIA Not Started</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% if dpia %}
+    <tr>
+      <td class="label">Created</td>
+      <td class="value">{{ dpia.created_at.strftime('%d %B %Y %H:%M') }} UTC</td>
+    </tr>
+    <tr>
+      <td class="label">Last Updated</td>
+      <td class="value">{{ dpia.updated_at.strftime('%d %B %Y %H:%M') }} UTC</td>
+    </tr>
+    {% endif %}
+  </table>
+</div>
+
+<!-- ─── DECLARATION ─── -->
+<div class="declaration">
+  <strong>Declaration by Senior Responsible Individual</strong><br><br>
+  I confirm that a Data Protection Impact Assessment has been carried out for the processing activity described above
+  in accordance with the Personal Data Protection Act, Cap. 44 and Regulation 33 of GN 449C.
+  The risks identified have been assessed and appropriate mitigation measures are in place or in progress.
+  <br><br>
+  <table style="width: 100%; border: none;">
+    <tr>
+      <td style="width: 45%; border: none;"><div class="sig-line">Name of Senior Responsible Individual</div></td>
+      <td style="width: 10%; border: none;"></td>
+      <td style="width: 45%; border: none;"><div class="sig-line">Designation</div></td>
+    </tr>
+    <tr>
+      <td style="border: none; padding-top: 14px;"><div class="sig-line">Signature</div></td>
+      <td style="border: none;"></td>
+      <td style="border: none; padding-top: 14px;"><div class="sig-line">Date</div></td>
+    </tr>
+  </table>
+  <br>
+  <strong>DPO Signature:</strong>
+  <div style="border-top: 1px solid #444; margin-top: 28px; padding-top: 4px; width: 200px; display: inline-block; font-size: 8pt; color: #555;">DPO Signature &amp; Date</div>
+</div>
+
+<!-- ─── NOTICE ─── -->
+<div class="notice">
+  <strong>FOR PDPC USE ONLY</strong> — DPIA Reference: __________________ &nbsp;&nbsp;
+  Date Received: __________________ &nbsp;&nbsp; Officer: __________________<br><br>
+  Submit this form to the PDPC where the DPIA reveals a high risk that cannot be mitigated (Reg 33(5)).
+  A copy must be retained by the organization for audit purposes.<br>
+  Form generated by PDPA-Comply v2 on {{ assessment.generated_at.strftime('%d %B %Y') }}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+.chip {
+  display: inline-block;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.7rem;
+  background: var(--brand-tint);
+  color: var(--brand-deep);
+  border: 1px solid var(--brand-tint-2);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}

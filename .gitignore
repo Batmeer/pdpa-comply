@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+# Runtime data
+*.db
+*.sqlite3
+backend/generated_forms/
+# Build output
+frontend/dist/
+# Env / secrets
+.env
+.env.*
+!.env.example
+# OS / editor
+.DS_Store
+Thumbs.db
+~$*
+.vscode/
+.idea/

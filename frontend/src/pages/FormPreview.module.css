@@ -1,0 +1,65 @@
+.page { max-width: 1200px; margin: 0 auto; padding: 36px 32px 64px; position: relative; isolation: isolate; }
+
+.header { margin-bottom: 24px; }
+.back { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px; display: inline-block; background: none; }
+.back:hover { color: var(--brand); }
+.title { font-size: 1.4rem; font-weight: 600; }
+.org   { font-size: 0.9rem; color: var(--text-muted); display: block; margin-top: 4px; }
+
+.body { display: flex; flex-direction: column; gap: 16px; }
+
+.statusPanel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+}
+.statusDot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+}
+.pending .statusDot { background: var(--partial-fg); animation: pulse 1.4s infinite; }
+.ready   .statusDot { background: var(--compliant-fg); }
+.error   .statusDot { background: var(--noncompliant-fg); }
+.pending { border-color: var(--partial-fg); background: var(--partial-bg); }
+.ready   { border-color: var(--compliant-fg); background: var(--compliant-bg); }
+.error   { border-color: var(--noncompliant-fg); background: var(--noncompliant-bg); }
+
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.4 } }
+
+.statusLabel { font-weight: 600; font-size: 0.9rem; }
+.statusSub   { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+}
+.cardTitle { font-size: 1rem; font-weight: 600; margin-bottom: 14px; }
+
+.dl { display: grid; grid-template-columns: 160px 1fr; gap: 8px 16px; }
+.dl dt { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; }
+.dl dd { font-size: 0.875rem; color: var(--text); }
+.hash { font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--text-muted); }
+
+.actions { display: flex; gap: 12px; }
+.downloadBtn {
+  background: var(--brand); color: #fff;
+  padding: 10px 20px; border-radius: 8px;
+  font-size: 0.9rem; font-weight: 600;
+  transition: background 0.15s;
+}
+.downloadBtn:hover { background: var(--brand-deep); }
+.refreshBtn {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text); padding: 10px 20px;
+  border-radius: 8px; font-size: 0.9rem; font-weight: 500;
+  transition: border-color 0.15s;
+}
+.refreshBtn:hover { border-color: var(--brand); color: var(--brand); }
+
+.state { display: flex; justify-content: center; padding: 80px 24px; color: var(--text-muted); }
+.err   { color: var(--noncompliant-fg); }

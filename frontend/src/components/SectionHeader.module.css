@@ -1,0 +1,16 @@
+.wrap {
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--brand-tint-2);
+  margin-bottom: 12px;
+}
+.title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.sub {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}

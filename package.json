@@ -1,0 +1,13 @@
+{
+  "name": "pdpa-comply",
+  "private": true,
+  "scripts": {
+    "backend": "cd backend && uvicorn app.main:app --reload --port 8000",
+    "frontend": "cd frontend && npm run dev",
+    "start": "concurrently -n API,WEB -c green,cyan \"npm run backend\" \"npm run frontend\"",
+    "install:all": "npm install && cd frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

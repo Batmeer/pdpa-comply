@@ -1,0 +1,255 @@
+.page { background: var(--page-bg); position: relative; isolation: isolate; }
+
+/* ── Hero ── */
+.hero {
+  background: var(--brand-tint);
+  padding: 52px 32px 56px;
+}
+.heroInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.headline {
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+.sub {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* ── Two-column wrapper ── */
+.outer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px 64px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  align-items: start;
+  padding-top: 40px;
+}
+
+/* ── Left: article ── */
+.article { min-width: 0; }
+
+.section { margin-bottom: 44px; }
+
+.h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.para {
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+
+/* Icon list */
+.iconList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 16px;
+}
+.iconRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.iconWrap {
+  width: 32px;
+  height: 32px;
+  background: var(--brand-tint);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--brand-deep);
+}
+.iconWrap svg { width: 16px; height: 16px; }
+.iconDot { background: transparent; }
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-tint-2);
+  display: block;
+}
+.iconText {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  padding-top: 6px;
+}
+
+/* Must-do cards */
+.mustCards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.mustCard {
+  background: var(--card);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.mustIcon { flex-shrink: 0; margin-top: 2px; }
+.mustTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.mustText {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ── Right: sticky sidebar ── */
+.sidebar {
+  position: sticky;
+  top: calc(var(--nav-h) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sideCard {
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.sideCardTitle {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* Card 1 — glance (dark teal) */
+.glanceCard {
+  background: var(--brand-deep);
+  color: #fff;
+}
+.glanceCard .sideCardTitle {
+  color: rgba(255,255,255,0.55);
+}
+
+.facts { display: flex; flex-direction: column; }
+.fact {
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.factBorder { border-bottom: 1px solid rgba(255,255,255,0.12); }
+.factStat {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+}
+.factDesc {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+}
+
+/* Card 2 — TOC (white) */
+.tocCard {
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.tocCard .sideCardTitle { color: var(--text-muted); }
+
+.toc {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tocItem {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  padding: 6px 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+  line-height: 1.4;
+}
+.tocItem:hover { background: var(--page-bg); color: var(--text); }
+.tocActive { color: var(--brand-deep); background: var(--brand-tint); font-weight: 500; }
+
+/* Card 3 — CTA (brand-tint) */
+.ctaCard {
+  background: var(--brand-tint);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ctaCardHead {
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.ctaCardSub {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.ctaCardBtn {
+  margin-top: 4px;
+  background: var(--brand);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+  transition: background 0.15s;
+  font-family: var(--font);
+}
+.ctaCardBtn:hover { background: var(--brand-deep); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    /* On mobile show sidebar above article */
+    order: -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .outer { padding: 0 20px 48px; }
+  .hero  { padding: 36px 20px 40px; }
+  .headline { font-size: 1.5rem; }
+  .sidebar { grid-template-columns: 1fr; }
+}

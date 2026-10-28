@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PDPA Compliance Report — {{ org.name }}</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 16mm 22mm 16mm;
+    @bottom-center {
+      content: "PDPA Compliance Report · {{ org.name }} · Page " counter(page) " of " counter(pages);
+      font-size: 7.5pt;
+      color: #888;
+    }
+  }
+  @page :first { @bottom-center { content: none; } }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #1a1a1a; line-height: 1.45; }
+
+  /* ── Cover ── */
+  .cover {
+    text-align: center;
+    padding: 40mm 10mm 20mm;
+    page-break-after: always;
+  }
+  .cover .badge {
+    display: inline-block;
+    background: #0F6E56;
+    color: #fff;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .cover h1 { font-size: 24pt; font-weight: 700; color: #0F6E56; margin-bottom: 6px; }
+  .cover .org-name { font-size: 14pt; color: #333; margin-bottom: 30px; }
+  .cover .score-ring {
+    display: inline-block;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 8px solid {% if score >= 76 %}#1a7c4b{% elif score >= 51 %}#0d7c7c{% elif score >= 26 %}#c97a00{% else %}#c0392b{% endif %};
+    line-height: 94px;
+    font-size: 26pt;
+    font-weight: 700;
+    color: {% if score >= 76 %}#1a7c4b{% elif score >= 51 %}#0d7c7c{% elif score >= 26 %}#c97a00{% else %}#c0392b{% endif %};
+    margin-bottom: 10px;
+  }
+  .cover .maturity { font-size: 11pt; font-weight: 600; color: #333; margin-bottom: 6px; }
+  .cover .cover-meta { font-size: 8.5pt; color: #888; margin-top: 4px; }
+  .cover .cover-divider { border: none; border-top: 2px solid #0F6E56; width: 60px; margin: 20px auto; }
+  .cover .cover-summary {
+    display: inline-block;
+    text-align: left;
+    background: #f0faf6;
+    border: 1px solid #9FE1CB;
+    border-radius: 8px;
+    padding: 12px 24px;
+    margin-top: 10px;
+    font-size: 9pt;
+  }
+  .cover .cover-summary td { padding: 3px 16px 3px 0; }
+  .cover .cover-summary .label { color: #666; }
+  .cover .cover-summary .val { font-weight: 600; color: #1a1a1a; }
+
+  /* ── Section headings ── */
+  .section-head {
+    background: #0F6E56;
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 700;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    margin-top: 18px;
+  }
+
+  /* ── Score bar ── */
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .bar-label { font-size: 8.5pt; color: #333; width: 200px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 10px; background: #e8e8e8; border-radius: 5px; overflow: hidden; }
+  .bar-fill  { height: 100%; border-radius: 5px; }
+  .bar-pct   { font-size: 8pt; font-weight: 600; width: 34px; text-align: right; flex-shrink: 0; }
+
+  /* ── Metrics row ── */
+  .metrics { display: flex; gap: 10px; margin: 10px 0 16px; }
+  .metric {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 9px 12px;
+    text-align: center;
+  }
+  .metric .m-val { font-size: 16pt; font-weight: 700; line-height: 1.1; }
+  .metric .m-lbl { font-size: 7.5pt; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .green { color: #1a7c4b; border-color: #c3e8d6 !important; background: #f4fdf8; }
+  .red   { color: #c0392b; border-color: #f5c6c0 !important; background: #fdf4f4; }
+  .amber { color: #c97a00; border-color: #f5e4c0 !important; background: #fdfbf4; }
+  .grey  { color: #555; }
+
+  /* ── Roadmap table ── */
+  table.roadmap { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  table.roadmap th {
+    background: #f0faf6;
+    border: 1px solid #ccc;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 5px 8px;
+    text-align: left;
+    color: #0F6E56;
+  }
+  table.roadmap td {
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+    font-size: 8.5pt;
+    vertical-align: top;
+  }
+  table.roadmap tr:nth-child(even) td { background: #fafafa; }
+
+  .pri-high   { color: #c0392b; font-weight: 700; }
+  .pri-medium { color: #c97a00; font-weight: 600; }
+  .pri-low    { color: #1a7c4b; font-weight: 600; }
+
+  /* ── Gap items ── */
+  .gap-item { border-left: 3px solid #ccc; padding: 7px 10px; margin-bottom: 7px; background: #fafafa; font-size: 8.5pt; }
+  .gap-item.nc { border-color: #c0392b; }
+  .gap-item.pa { border-color: #c97a00; }
+  .gap-req  { font-weight: 600; color: #1a1a1a; margin-bottom: 3px; }
+  .gap-rem  { color: #444; }
+  .gap-status { font-size: 7.5pt; font-weight: 700; display: inline-block; padding: 1px 6px; border-radius: 4px; margin-bottom: 4px; }
+  .gap-status.nc { background: #fdecea; color: #c0392b; }
+  .gap-status.pa { background: #fef6e7; color: #c97a00; }
+
+  .page-break { page-break-before: always; }
+
+  /* ── Footer / integrity ── */
+  .footer-note {
+    font-size: 7.5pt;
+    color: #888;
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ COVER ═══════════════════════════════════ -->
+<div class="cover">
+  <div class="badge">PDPA Compliance Report</div>
+  <h1>{{ org.name }}</h1>
+  <div class="org-name">{{ org.sector }}</div>
+
+  <div class="score-ring">{{ score }}%</div>
+  <div class="maturity">{{ maturity }}</div>
+  <div class="cover-meta">Generated {{ assessment.generated_at.strftime('%d %B %Y') }}</div>
+
+  <hr class="cover-divider">
+
+  <table class="cover-summary">
+    <tr>
+      <td class="label">Requirements assessed</td>
+      <td class="val">{{ applicable_count }}</td>
+    </tr>
+    <tr>
+      <td class="label">Fully compliant</td>
+      <td class="val" style="color: #1a7c4b;">{{ compliant_count }}</td>
+    </tr>
+    <tr>
+      <td class="label">Gaps to close</td>
+      <td class="val" style="color: #c0392b;">{{ non_compliant_count + partial_count }}</td>
+    </tr>
+    <tr>
+      <td class="label">Partially done</td>
+      <td class="val" style="color: #c97a00;">{{ partial_count }}</td>
+    </tr>
+    <tr>
+      <td class="label">Under review</td>
+      <td class="val">{{ review_count }}</td>
+    </tr>
+  </table>
+
+  <div class="cover-meta" style="margin-top: 20px;">
+    Personal Data Protection Act, Cap. 44 (Act No. 11 of 2022) · Tanzania
+  </div>
+</div>
+
+
+<!-- ══════════════════════════ PAGE 2: SECTION BREAKDOWN ════════════════════════ -->
+<div class="section-head">Section 1 — Compliance by Area</div>
+
+<div class="metrics">
+  <div class="metric green">
+    <div class="m-val">{{ compliant_count }}</div>
+    <div class="m-lbl">Compliant</div>
+  </div>
+  <div class="metric amber">
+    <div class="m-val">{{ partial_count }}</div>
+    <div class="m-lbl">Partial</div>
+  </div>
+  <div class="metric red">
+    <div class="m-val">{{ non_compliant_count }}</div>
+    <div class="m-lbl">Non-compliant</div>
+  </div>
+  <div class="metric grey">
+    <div class="m-val">{{ review_count }}</div>
+    <div class="m-lbl">Under review</div>
+  </div>
+</div>
+
+{% for sec in sections %}
+<div class="bar-row">
+  <div class="bar-label">{{ sec.name }}</div>
+  <div class="bar-track">
+    <div class="bar-fill" style="width: {{ sec.score }}%; background: {% if sec.score >= 76 %}#1a7c4b{% elif sec.score >= 51 %}#0d7c7c{% elif sec.score >= 26 %}#c97a00{% else %}#c0392b{% endif %};"></div>
+  </div>
+  <div class="bar-pct" style="color: {% if sec.score >= 76 %}#1a7c4b{% elif sec.score >= 51 %}#0d7c7c{% elif sec.score >= 26 %}#c97a00{% else %}#c0392b{% endif %};">{{ sec.score }}%</div>
+</div>
+{% endfor %}
+
+
+<!-- ══════════════════════════ PAGE 3+: FULL ACTION PLAN ══════════════════════════ -->
+<div class="section-head page-break">Section 2 — Full Action Plan ({{ roadmap | length }} items)</div>
+<p style="font-size: 8.5pt; color: #555; margin-bottom: 10px;">
+  All items are ranked by their potential score impact. Start from Rank 1.
+</p>
+
+<table class="roadmap">
+  <thead>
+    <tr>
+      <th style="width: 34px;">#</th>
+      <th style="width: 56px;">Priority</th>
+      <th>What to do</th>
+      <th style="width: 60px;">Score gain</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in roadmap %}
+    <tr>
+      <td style="text-align: center; font-weight: 700; color: #0F6E56;">{{ item.rank }}</td>
+      <td>
+        <span class="pri-{{ item.priority | lower }}">{{ item.priority }}</span>
+      </td>
+      <td>{{ item.action }}</td>
+      <td style="text-align: center; font-weight: 600;">+{{ item.score_impact | round(1) }}%</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<!-- ═══════════════════════════ APPENDIX: GAP DETAIL ════════════════════════════ -->
+<div class="section-head page-break">Appendix — Gap Detail by Area</div>
+<p style="font-size: 8.5pt; color: #555; margin-bottom: 12px;">
+  Every non-compliant and partial requirement, with the specific action needed.
+</p>
+
+{% for sec in sections %}
+{% if sec.gaps %}
+<div style="margin-bottom: 2px; font-size: 9pt; font-weight: 700; color: #0F6E56; margin-top: 12px;">
+  {{ sec.name }} ({{ sec.score }}% compliant)
+</div>
+
+{% for r in sec.gaps %}
+<div class="gap-item {% if r.status == 'NON_COMPLIANT' %}nc{% else %}pa{% endif %}">
+  <span class="gap-status {% if r.status == 'NON_COMPLIANT' %}nc{% else %}pa{% endif %}">
+    {% if r.status == 'NON_COMPLIANT' %}Not done{% else %}Partial{% endif %}
+  </span>
+  <div class="gap-req">{{ r.requirement }}</div>
+  <div class="gap-rem">Action: {{ r.remediation }}</div>
+</div>
+{% endfor %}
+
+{% endif %}
+{% endfor %}
+
+
+<!-- ═══════════════════════════ FOOTER ════════════════════════════ -->
+<div class="footer-note">
+  <strong>Confidential — Internal Use Only.</strong>
+  This report contains sensitive compliance information and is intended solely for the use of
+  <strong>{{ org.name }}</strong> and its authorised personnel.
+  It must not be disclosed to third parties without prior written consent.<br><br>
+  <strong>Disclaimer.</strong>
+  This report is produced by PDPA-Comply, a self-assessment readiness tool, and does not constitute
+  legal advice, a legal opinion, or an official determination by the Personal Data Protection Commission (PDPC).
+  Organisations should seek independent legal counsel before making compliance submissions to the PDPC.<br><br>
+  Generated {{ assessment.generated_at.strftime('%d %B %Y') }} ·
+  Personal Data Protection Act, Cap. 44 (Act No. 11 of 2022), Tanzania ·
+  PDPA-Comply v2
+</div>
+
+</body>
+</html>

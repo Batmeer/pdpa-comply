@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Form 1 — Application for Registration — PDPC</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 20mm 18mm;
+    @bottom-center {
+      content: "Form 1 · PDPA Cap 44 · GN 449C · Page " counter(page) " of " counter(pages);
+      font-size: 8pt;
+      color: #666;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #1a1a1a; line-height: 1.4; }
+
+  /* Header */
+  .header { text-align: center; border-bottom: 3px solid #0d7c7c; padding-bottom: 10px; margin-bottom: 16px; }
+  .header .authority { font-size: 8pt; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+  .header h1 { font-size: 16pt; font-weight: 700; color: #0d7c7c; margin: 4px 0 2px; }
+  .header .subtitle { font-size: 9pt; color: #444; }
+  .header .ref { font-size: 8pt; color: #777; margin-top: 4px; }
+
+  /* Sections */
+  .section { margin-bottom: 14px; }
+  .section-title {
+    background: #0d7c7c;
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 700;
+    padding: 4px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  /* Form table */
+  table.form-table { width: 100%; border-collapse: collapse; }
+  table.form-table td {
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    vertical-align: top;
+  }
+  table.form-table td.label {
+    width: 38%;
+    background: #f5f5f5;
+    font-weight: 600;
+    font-size: 8.5pt;
+    color: #333;
+  }
+  table.form-table td.value { font-size: 9pt; }
+
+  /* Fee highlight */
+  .fee-box {
+    border: 2px solid #0d7c7c;
+    border-radius: 4px;
+    padding: 10px 14px;
+    background: #f0fafa;
+    margin-bottom: 14px;
+  }
+  .fee-box .fee-amount { font-size: 16pt; font-weight: 700; color: #0d7c7c; }
+  .fee-box .fee-label { font-size: 8pt; color: #555; }
+
+  /* Checkbox row */
+  .check { display: inline-block; width: 12px; height: 12px; border: 1.5px solid #444; margin-right: 4px; vertical-align: middle; text-align: center; line-height: 10px; font-size: 9pt; }
+  .check.checked::after { content: "✓"; color: #0d7c7c; font-weight: 700; }
+
+  /* Declaration */
+  .declaration {
+    border: 1px solid #bbb;
+    padding: 10px 12px;
+    font-size: 8.5pt;
+    color: #333;
+    margin-top: 14px;
+    background: #fafafa;
+  }
+  .sig-line { border-top: 1px solid #444; margin-top: 28px; padding-top: 4px; font-size: 8pt; color: #555; }
+
+  /* Notice */
+  .notice { font-size: 7.5pt; color: #666; margin-top: 14px; border-top: 1px solid #ddd; padding-top: 8px; }
+
+  .score-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 9pt;
+    color: #fff;
+    background: {% if assessment.score >= 76 %}#1a7c4b{% elif assessment.score >= 51 %}#0d7c7c{% elif assessment.score >= 26 %}#c97a00{% else %}#c0392b{% endif %};
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<div class="header">
+  <div class="authority">United Republic of Tanzania</div>
+  <div class="authority">Personal Data Protection Commission (PDPC)</div>
+  <h1>FORM 1</h1>
+  <div class="subtitle">Application for Registration as Data Controller / Data Processor</div>
+  <div class="ref">Personal Data Protection Act, Cap. 44 · GN 449C, Regulation 4(1) &amp; Second Schedule</div>
+</div>
+
+<!-- ─── SECTION A: APPLICANT DETAILS ─── -->
+<div class="section">
+  <div class="section-title">Part A — Applicant Details</div>
+  <table class="form-table">
+    <tr>
+      <td class="label">Full Legal Name</td>
+      <td class="value">{{ org.name }}</td>
+    </tr>
+    <tr>
+      <td class="label">Sector / Industry</td>
+      <td class="value">{{ org.sector }}</td>
+    </tr>
+    <tr>
+      <td class="label">Registration Class</td>
+      <td class="value">{{ registration_class }}</td>
+    </tr>
+    <tr>
+      <td class="label">Employee Band</td>
+      <td class="value">{{ org.employee_band }} employees</td>
+    </tr>
+    <tr>
+      <td class="label">Annual Turnover Band</td>
+      <td class="value">TZS {{ org.turnover_band }}</td>
+    </tr>
+    <tr>
+      <td class="label">Size Band Determination</td>
+      <td class="value"><strong>{{ fee_band }}</strong></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ─── SECTION B: PROCESSING ACTIVITIES ─── -->
+<div class="section">
+  <div class="section-title">Part B — Processing Activities &amp; Data Categories</div>
+  <table class="form-table">
+    <tr>
+      <td class="label">Processes Sensitive Personal Data</td>
+      <td class="value">
+        <span class="check {% if org.processes_sensitive_data %}checked{% endif %}"></span> Yes &nbsp;&nbsp;
+        <span class="check {% if not org.processes_sensitive_data %}checked{% endif %}"></span> No
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Transfers Data Abroad</td>
+      <td class="value">
+        <span class="check {% if org.transfers_abroad %}checked{% endif %}"></span> Yes &nbsp;&nbsp;
+        <span class="check {% if not org.transfers_abroad %}checked{% endif %}"></span> No
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Uses Data Processors (Third Parties)</td>
+      <td class="value">
+        <span class="check {% if org.uses_processors %}checked{% endif %}"></span> Yes &nbsp;&nbsp;
+        <span class="check {% if not org.uses_processors %}checked{% endif %}"></span> No
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Conducts Direct Marketing</td>
+      <td class="value">
+        <span class="check {% if org.does_direct_marketing %}checked{% endif %}"></span> Yes &nbsp;&nbsp;
+        <span class="check {% if not org.does_direct_marketing %}checked{% endif %}"></span> No
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Uses Automated Decision-Making</td>
+      <td class="value">
+        <span class="check {% if org.uses_automated_decisions %}checked{% endif %}"></span> Yes &nbsp;&nbsp;
+        <span class="check {% if not org.uses_automated_decisions %}checked{% endif %}"></span> No
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Processes Children's Data</td>
+      <td class="value">
+        <span class="check {% if org.processes_children_data %}checked{% endif %}"></span> Yes &nbsp;&nbsp;
+        <span class="check {% if not org.processes_children_data %}checked{% endif %}"></span> No
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Public Institution</td>
+      <td class="value">
+        <span class="check {% if org.is_public_institution %}checked{% endif %}"></span> Yes &nbsp;&nbsp;
+        <span class="check {% if not org.is_public_institution %}checked{% endif %}"></span> No
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- ─── SECTION C: COMPLIANCE SNAPSHOT ─── -->
+<div class="section">
+  <div class="section-title">Part C — Compliance Assessment Snapshot (generated {{ assessment.generated_at.strftime('%d %b %Y') }})</div>
+  <table class="form-table">
+    <tr>
+      <td class="label">Compliance Score</td>
+      <td class="value"><span class="score-badge">{{ assessment.score }}%</span> &nbsp; {{ assessment.maturity }}</td>
+    </tr>
+    <tr>
+      <td class="label">Controls Assessed</td>
+      <td class="value">{{ assessment.applicable_count }} applicable controls</td>
+    </tr>
+    <tr>
+      <td class="label">Compliant / Partial / Non-Compliant</td>
+      <td class="value">{{ assessment.compliant_count }} / {{ assessment.partial_count }} / {{ assessment.non_compliant_count }}</td>
+    </tr>
+    <tr>
+      <td class="label">Assessment Date</td>
+      <td class="value">{{ assessment.generated_at.strftime('%d %B %Y') }}</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ─── SECTION D: REGISTRATION FEE ─── -->
+<div class="section">
+  <div class="section-title">Part D — Registration Fee (Second Schedule, GN 449C)</div>
+  <div class="fee-box">
+    <div class="fee-label">Fee payable ({{ fee_band }} organisation band)</div>
+    <div class="fee-amount">{{ fee_formatted }}</div>
+    <div class="fee-label" style="margin-top:4px;">Payable to: Personal Data Protection Commission · Bank details on PDPC website</div>
+  </div>
+  <table class="form-table">
+    <tr>
+      <td class="label">Payment Reference</td>
+      <td class="value" style="min-height: 20px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="label">Date of Payment</td>
+      <td class="value">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="label">Receipt / Bank Slip Number</td>
+      <td class="value">&nbsp;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ─── DECLARATION ─── -->
+<div class="declaration">
+  <strong>Declaration</strong><br><br>
+  I, the undersigned, being duly authorized to act on behalf of <strong>{{ org.name }}</strong>,
+  hereby apply for registration with the Personal Data Protection Commission as set out above.
+  I declare that the information provided is true and correct to the best of my knowledge.
+  I understand that providing false information is an offence under the Personal Data Protection Act, Cap. 44.
+  <br><br>
+  <table style="width: 100%; border: none;">
+    <tr>
+      <td style="width: 45%; border: none;">
+        <div class="sig-line">Authorized Signatory Name</div>
+      </td>
+      <td style="width: 10%; border: none;"></td>
+      <td style="width: 45%; border: none;">
+        <div class="sig-line">Designation / Title</div>
+      </td>
+    </tr>
+    <tr style="margin-top: 14px;">
+      <td style="border: none; padding-top: 14px;">
+        <div class="sig-line">Signature</div>
+      </td>
+      <td style="border: none;"></td>
+      <td style="border: none; padding-top: 14px;">
+        <div class="sig-line">Date</div>
+      </td>
+    </tr>
+  </table>
+  <div style="margin-top: 14px;">
+    <strong>Official Stamp:</strong>
+    <div style="width: 80px; height: 60px; border: 1px dashed #999; display: inline-block; margin-left: 10px; vertical-align: top;"></div>
+  </div>
+</div>
+
+<!-- ─── NOTICE ─── -->
+<div class="notice">
+  <strong>FOR PDPC USE ONLY</strong> — Registration No: __________________ &nbsp;&nbsp;
+  Date Received: __________________ &nbsp;&nbsp; Officer: __________________<br><br>
+  This form must be submitted with: (a) a copy of the certificate of incorporation or registration; (b) proof of payment of the prescribed fee; (c) any other document the Commission may require per Reg 5.<br>
+  Queries: pdpc@tanzania.go.tz &nbsp;·&nbsp; Form generated by PDPA-Comply v2 on {{ assessment.generated_at.strftime('%d %b %Y %H:%M') }} UTC
+</div>
+
+</body>
+</html>

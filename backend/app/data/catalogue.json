@@ -1,0 +1,844 @@
+{
+  "meta": {
+    "version": "2.0",
+    "law": "Personal Data Protection Act, Cap 44 (Act No. 11 of 2022)",
+    "regulations": "Personal Data Protection (Collection and Processing) Regulations, 2023 (GN 449C)",
+    "control_count": 52
+  },
+  "scoring": {
+    "formula": "control_gap = severity * sensitivity_multiplier * status_modifier",
+    "status_modifiers": {
+      "COMPLIANT": 0.0,
+      "PARTIAL": 0.5,
+      "NON_COMPLIANT": 1.0,
+      "REVIEW_REQUIRED": 0.5
+    },
+    "maturity_bands": [
+      {
+        "min": 0,
+        "max": 25,
+        "label": "Initial"
+      },
+      {
+        "min": 26,
+        "max": 50,
+        "label": "Developing"
+      },
+      {
+        "min": 51,
+        "max": 75,
+        "label": "Managed"
+      },
+      {
+        "min": 76,
+        "max": 100,
+        "label": "Optimized"
+      }
+    ]
+  },
+  "dpia_triggers": {
+    "a": "Automated decisions with significant legal effect / profiling / sensitive data gating access",
+    "b": "Large-scale repurposing of personal data",
+    "c": "Processing of biometric or genetic data",
+    "d": "Significant changes raising risk at any processing stage",
+    "e": "Sensitive data of children or vulnerable groups",
+    "f": "Combining/cross-referencing datasets from different sources/purposes",
+    "g": "Large-scale processing of personal data",
+    "h": "Systematic monitoring of public areas at scale",
+    "i": "Innovative use of new technological/organizational measures",
+    "j": "Processing that prevents subjects exercising their rights"
+  },
+  "applicability_flags": [
+    "processes_sensitive_data",
+    "transfers_abroad",
+    "uses_processors",
+    "does_direct_marketing",
+    "uses_automated_decisions",
+    "processes_children_data",
+    "is_public_institution",
+    "registered",
+    "dpia_required"
+  ],
+  "controls": [
+    {
+      "id": "A-01",
+      "cluster": "Registration",
+      "legal_anchor": {
+        "act_section": "s.14(1)",
+        "regulation": "Reg 4(1)"
+      },
+      "requirement": "Organization must be registered with the PDPC as a data controller and/or processor before collecting or processing personal data.",
+      "severity": 5,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "PDPC registration certificate (Form 2) number + date",
+      "is_dpia_trigger": false,
+      "remediation": "Submit Form 1 with incorporation documents and the prescribed fee to the PDPC."
+    },
+    {
+      "id": "A-02",
+      "cluster": "Registration",
+      "legal_anchor": {
+        "act_section": "s.14(1)",
+        "regulation": "Reg 3, 4"
+      },
+      "requirement": "Organization must register under the correct capacity \u2014 controller, processor, or both \u2014 matching how it actually handles data.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Declared class matches processing reality",
+      "is_dpia_trigger": false,
+      "remediation": "Determine controller vs processor role and register accordingly."
+    },
+    {
+      "id": "A-03",
+      "cluster": "Registration",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 10(1)"
+      },
+      "requirement": "Any change to registered particulars must be notified to the PDPC in writing within 14 days.",
+      "severity": 2,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "registered",
+      "evidence": "Record of change notifications",
+      "is_dpia_trigger": false,
+      "remediation": "Establish a process to notify the PDPC within 14 days of changes to name, address, data types, or DPO details."
+    },
+    {
+      "id": "A-04",
+      "cluster": "Registration",
+      "legal_anchor": {
+        "act_section": "s.16",
+        "regulation": "Reg 7, 8"
+      },
+      "requirement": "Registration valid 5 years; renewal applied for within 3 months before expiry, else re-registration required.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "registered",
+      "evidence": "Expiry date tracked; renewal diarised",
+      "is_dpia_trigger": false,
+      "remediation": "Diarise certificate expiry and file Form 3 within the 3-month renewal window."
+    },
+    {
+      "id": "A-05",
+      "cluster": "Registration",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 4(2), Sch 2"
+      },
+      "requirement": "Pay the registration fee matching the org size band (employees + turnover).",
+      "severity": 2,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Fee paid matches band",
+      "is_dpia_trigger": false,
+      "remediation": "Determine band: Small(1-49 & <100M)=100,000; Medium(50-99 & 100-500M)=200,000; Large(100+ & >500M)=1,000,000; public/religious per schedule."
+    },
+    {
+      "id": "B-01",
+      "cluster": "Lawful Processing",
+      "legal_anchor": {
+        "act_section": "s.5(a)",
+        "regulation": "Reg 23(a), 25"
+      },
+      "requirement": "All personal data processed lawfully, fairly and transparently, with a lawful basis identified.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Documented lawful basis per processing activity",
+      "is_dpia_trigger": false,
+      "remediation": "Map each processing activity to a lawful basis and document it."
+    },
+    {
+      "id": "B-02",
+      "cluster": "Lawful Processing",
+      "legal_anchor": {
+        "act_section": "s.5(b), s.25",
+        "regulation": "Reg 23(b), 26"
+      },
+      "requirement": "Data collected for explicit, specified, legitimate purposes and not used incompatibly.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Purpose register; no incompatible secondary use",
+      "is_dpia_trigger": true,
+      "remediation": "Define and record the specific purpose for each dataset; restrict secondary use."
+    },
+    {
+      "id": "B-03",
+      "cluster": "Lawful Processing",
+      "legal_anchor": {
+        "act_section": "s.5(c)",
+        "regulation": "Reg 23(c), 28"
+      },
+      "requirement": "Data collected must be adequate, relevant and limited to what is necessary.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Collection limited to necessary fields",
+      "is_dpia_trigger": false,
+      "remediation": "Audit collected fields; remove unnecessary data; apply minimisation per Reg 28."
+    },
+    {
+      "id": "B-04",
+      "cluster": "Lawful Processing",
+      "legal_anchor": {
+        "act_section": "s.23(1)-(2)",
+        "regulation": null
+      },
+      "requirement": "Data collected directly from the subject, who is made aware of purposes, authorization and recipients before collection.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Privacy notice shown at point of collection",
+      "is_dpia_trigger": false,
+      "remediation": "Deploy a collection notice at every collection point stating purpose, authorization and recipients."
+    },
+    {
+      "id": "B-05",
+      "cluster": "Lawful Processing",
+      "legal_anchor": {
+        "act_section": "s.22(3)",
+        "regulation": null
+      },
+      "requirement": "Personal data must not be collected by unlawful means.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Collection channels lawful and consented",
+      "is_dpia_trigger": false,
+      "remediation": "Review collection channels; eliminate covert or deceptive collection."
+    },
+    {
+      "id": "B-06",
+      "cluster": "Lawful Processing",
+      "legal_anchor": {
+        "act_section": "s.25(1)",
+        "regulation": null
+      },
+      "requirement": "Data used only for the purpose collected, save lawful s.25(2) exceptions.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Use audit shows no scope creep",
+      "is_dpia_trigger": false,
+      "remediation": "Restrict internal use to the registered purpose; document any s.25(2) exception."
+    },
+    {
+      "id": "B-07",
+      "cluster": "Lawful Processing",
+      "legal_anchor": {
+        "act_section": "s.26",
+        "regulation": null
+      },
+      "requirement": "Data not disclosed to anyone other than the subject except per s.25 conditions.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Disclosure log; third-party disclosures justified",
+      "is_dpia_trigger": false,
+      "remediation": "Implement a disclosure-control policy; log and justify every external disclosure."
+    },
+    {
+      "id": "C-01",
+      "cluster": "Accuracy & Retention",
+      "legal_anchor": {
+        "act_section": "s.5(d), s.24",
+        "regulation": "Reg 23(d), 29"
+      },
+      "requirement": "Data accurate, kept up to date, with inaccurate data erased/rectified without delay.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Accuracy checks; rectification process",
+      "is_dpia_trigger": false,
+      "remediation": "Implement periodic accuracy verification and a without-delay rectification workflow."
+    },
+    {
+      "id": "C-02",
+      "cluster": "Accuracy & Retention",
+      "legal_anchor": {
+        "act_section": "s.5(e), s.28",
+        "regulation": "Reg 23(e), 30"
+      },
+      "requirement": "Data kept in identifiable form no longer than necessary; retention periods defined.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Documented retention schedule",
+      "is_dpia_trigger": false,
+      "remediation": "Create a retention schedule per data category with defined periods and justification."
+    },
+    {
+      "id": "C-03",
+      "cluster": "Accuracy & Retention",
+      "legal_anchor": {
+        "act_section": "s.28",
+        "regulation": "Reg 30(a),(d)"
+      },
+      "requirement": "Clear internal procedures for deletion/destruction; deleted data not recoverable.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Documented, tested disposal procedure",
+      "is_dpia_trigger": false,
+      "remediation": "Define and test secure deletion/destruction procedures ensuring irreversibility."
+    },
+    {
+      "id": "D-01",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": "s.27(1)-(2)",
+        "regulation": "Reg 23(g), 27"
+      },
+      "requirement": "Technical and organizational measures appropriate to risk protect data against loss, unauthorized access, alteration or processing.",
+      "severity": 5,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "all",
+      "evidence": "Security policy + implemented controls",
+      "is_dpia_trigger": false,
+      "remediation": "Implement a security baseline covering the Reg 27 factors sized to the data's risk."
+    },
+    {
+      "id": "D-02",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(a)"
+      },
+      "requirement": "An operative means of managing information-security policies and procedures must exist.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Written, maintained infosec policy",
+      "is_dpia_trigger": false,
+      "remediation": "Adopt and maintain an information security policy with assigned ownership."
+    },
+    {
+      "id": "D-03",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(b)"
+      },
+      "requirement": "Risks to personal-data security assessed and countermeasures put in place.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Documented risk assessment + treatment",
+      "is_dpia_trigger": false,
+      "remediation": "Conduct a security risk assessment and implement controls for identified risks."
+    },
+    {
+      "id": "D-04",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(d)"
+      },
+      "requirement": "Only authorized personnel may access personal data necessary for their tasks.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "all",
+      "evidence": "Access-control matrix; role-based access",
+      "is_dpia_trigger": false,
+      "remediation": "Implement role-based access control and remove unnecessary access rights."
+    },
+    {
+      "id": "D-05",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(e)"
+      },
+      "requirement": "Transfer of personal data secured against unauthorized access and changes.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "all",
+      "evidence": "Encryption in transit (TLS) on data flows",
+      "is_dpia_trigger": false,
+      "remediation": "Enforce encryption (TLS/equivalent) on all personal-data transmissions."
+    },
+    {
+      "id": "D-06",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(f)"
+      },
+      "requirement": "Storage of personal data secured against unauthorized use, access and alterations.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "all",
+      "evidence": "Encryption/controls at rest; restricted storage",
+      "is_dpia_trigger": false,
+      "remediation": "Secure storage with access restrictions and, where feasible, encryption at rest."
+    },
+    {
+      "id": "D-07",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(g)"
+      },
+      "requirement": "Backups and logs kept to the extent necessary for data security.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Backup regime + retained logs",
+      "is_dpia_trigger": false,
+      "remediation": "Implement a backup schedule and retain security logs."
+    },
+    {
+      "id": "D-08",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(h)"
+      },
+      "requirement": "Audit trails and event monitoring used as routine security controls.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Monitoring/logging in place and reviewed",
+      "is_dpia_trigger": true,
+      "remediation": "Enable audit logging and routine event monitoring/alerting."
+    },
+    {
+      "id": "D-09",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(i)"
+      },
+      "requirement": "Sensitive data protected with adequate measures and, where possible, kept separate.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "processes_sensitive_data",
+      "evidence": "Sensitive data logically/physically segregated",
+      "is_dpia_trigger": true,
+      "remediation": "Segregate sensitive data stores and apply enhanced protection."
+    },
+    {
+      "id": "D-10",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(j)"
+      },
+      "requirement": "Procedures to detect, handle, report and learn from personal-data breaches.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Incident-response procedure documented + tested",
+      "is_dpia_trigger": false,
+      "remediation": "Establish an incident-response plan covering detection, handling, reporting and lessons-learned."
+    },
+    {
+      "id": "D-11",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 27(k)"
+      },
+      "requirement": "Software supporting processing regularly reviewed and tested for vulnerabilities.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Regular vulnerability testing records",
+      "is_dpia_trigger": false,
+      "remediation": "Schedule periodic vulnerability assessments/testing of processing systems."
+    },
+    {
+      "id": "D-12",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 24"
+      },
+      "requirement": "Data-protection mechanisms and technical measures built in by design and default.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "all",
+      "evidence": "Privacy-by-design evidenced in systems",
+      "is_dpia_trigger": false,
+      "remediation": "Embed data-protection requirements into system design and default configurations."
+    },
+    {
+      "id": "D-13",
+      "cluster": "Security",
+      "legal_anchor": {
+        "act_section": "s.27(5)",
+        "regulation": null
+      },
+      "requirement": "Controller must notify the PDPC without undue delay of any security breach affecting personal data.",
+      "severity": 5,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "all",
+      "evidence": "Breach-notification procedure naming PDPC + timeline",
+      "is_dpia_trigger": false,
+      "remediation": "Add a PDPC breach-notification step (without undue delay) to the incident-response plan."
+    },
+    {
+      "id": "E-01",
+      "cluster": "DPO",
+      "legal_anchor": {
+        "act_section": "s.27(3)",
+        "regulation": "Reg 32"
+      },
+      "requirement": "Every controller and processor must appoint a DPO. No thresholds \u2014 universal.",
+      "severity": 5,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "DPO appointment record; DPO details in registration",
+      "is_dpia_trigger": false,
+      "remediation": "Appoint a DPO (may be existing staff) and record their details, including in the PDPC registration."
+    },
+    {
+      "id": "E-02",
+      "cluster": "DPO",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 32(a)-(b)"
+      },
+      "requirement": "DPO must ensure compliance and advise on rectification of violations.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "DPO monitoring activity/records",
+      "is_dpia_trigger": false,
+      "remediation": "Define the DPO's monitoring mandate and reporting lines internally."
+    },
+    {
+      "id": "E-03",
+      "cluster": "DPO",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 32(c)"
+      },
+      "requirement": "DPO must prepare and submit quarterly compliance reports to the PDPC.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Evidence of quarterly submissions",
+      "is_dpia_trigger": false,
+      "remediation": "Establish a quarterly reporting cycle to the PDPC."
+    },
+    {
+      "id": "E-04",
+      "cluster": "DPO",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 32(d)"
+      },
+      "requirement": "DPO must handle applications/complaints from data subjects.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Complaint-handling channel routed via DPO",
+      "is_dpia_trigger": false,
+      "remediation": "Create a data-subject complaint channel managed by the DPO."
+    },
+    {
+      "id": "E-05",
+      "cluster": "DPO",
+      "legal_anchor": {
+        "act_section": "s.27(4)",
+        "regulation": null
+      },
+      "requirement": "Where a processor is used, a contract binds it to the controller's instructions and security standards.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "uses_processors",
+      "evidence": "Signed data-processing agreement(s)",
+      "is_dpia_trigger": false,
+      "remediation": "Put data-processing agreements in place with all processors."
+    },
+    {
+      "id": "F-01",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": "s.33",
+        "regulation": null
+      },
+      "requirement": "Subjects can obtain confirmation of processing, a description of their data, purposes, and recipients.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Subject-access request (SAR) procedure",
+      "is_dpia_trigger": false,
+      "remediation": "Implement a SAR procedure with defined response steps."
+    },
+    {
+      "id": "F-02",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": "s.34",
+        "regulation": "Reg 15"
+      },
+      "requirement": "Subjects can require suspension of processing likely to cause substantial damage; controller acknowledges within 72 hours.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Form 4 workflow with 72-hour acknowledgement",
+      "is_dpia_trigger": false,
+      "remediation": "Build a Form 4 handling workflow with 72-hour acknowledgement and 7-day decision."
+    },
+    {
+      "id": "F-03",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": "s.29, s.38",
+        "regulation": "Reg 16"
+      },
+      "requirement": "Subjects can apply (Form 5) to rectify incorrect data; controller responds within 14 days.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Rectification workflow (Form 5), 14-day SLA",
+      "is_dpia_trigger": false,
+      "remediation": "Implement a Form 5 rectification workflow with 14-day decision and pre-amendment record retention."
+    },
+    {
+      "id": "F-04",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 17"
+      },
+      "requirement": "Subjects can apply (Form 6) to erase data on defined grounds; controller responds within 14 days, subject to exceptions.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Erasure workflow (Form 6), 14-day SLA, exception checks",
+      "is_dpia_trigger": false,
+      "remediation": "Implement a Form 6 erasure workflow including the Reg 17(4) exception checks."
+    },
+    {
+      "id": "F-05",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": "s.35",
+        "regulation": null
+      },
+      "requirement": "Subjects can require the controller to stop processing for direct marketing.",
+      "severity": 2,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "does_direct_marketing",
+      "evidence": "Opt-out mechanism",
+      "is_dpia_trigger": false,
+      "remediation": "Provide a direct-marketing opt-out and honour it."
+    },
+    {
+      "id": "F-06",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": "s.36",
+        "regulation": "Reg 19"
+      },
+      "requirement": "Where a decision significantly affecting a subject is solely automated, subject must be notified and may require human reconsideration.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "uses_automated_decisions",
+      "evidence": "Notice + human-review path",
+      "is_dpia_trigger": true,
+      "remediation": "Notify subjects of solely-automated decisions and provide a human-reconsideration route."
+    },
+    {
+      "id": "F-07",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": "s.37",
+        "regulation": null
+      },
+      "requirement": "Org recognizes subjects' right to compensation for damage from contraventions.",
+      "severity": 2,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Liability awareness/policy reference",
+      "is_dpia_trigger": false,
+      "remediation": "Document liability exposure and reference it in the data-protection policy."
+    },
+    {
+      "id": "F-08",
+      "cluster": "Data Subject Rights",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 18(2)"
+      },
+      "requirement": "Where the subject is a child, special handling \u2014 representative identification, consent rules, parent/guardian informed of risks.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "processes_children_data",
+      "evidence": "Child-data handling procedure",
+      "is_dpia_trigger": true,
+      "remediation": "Implement child/vulnerable-person handling per Reg 18(2)."
+    },
+    {
+      "id": "G-01",
+      "cluster": "Sensitive Data",
+      "legal_anchor": {
+        "act_section": "s.30(1)",
+        "regulation": null
+      },
+      "requirement": "Sensitive personal data not processed without prior written consent (save s.30(5) exceptions).",
+      "severity": 5,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "processes_sensitive_data",
+      "evidence": "Written consent records for sensitive data",
+      "is_dpia_trigger": true,
+      "remediation": "Obtain and record prior written consent for all sensitive-data processing, or document a s.30(5) exception."
+    },
+    {
+      "id": "G-02",
+      "cluster": "Sensitive Data",
+      "legal_anchor": {
+        "act_section": "s.30(2)",
+        "regulation": null
+      },
+      "requirement": "Consent for sensitive data withdrawable at any time without explanation or charge.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "processes_sensitive_data",
+      "evidence": "Withdrawal mechanism + handling",
+      "is_dpia_trigger": false,
+      "remediation": "Provide a free, no-explanation consent-withdrawal mechanism."
+    },
+    {
+      "id": "G-03",
+      "cluster": "Sensitive Data",
+      "legal_anchor": {
+        "act_section": "s.30(4)",
+        "regulation": null
+      },
+      "requirement": "Where the subject is a minor or unable to consent, consent comes from parent/guardian/legal representative.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.5,
+      "applies_to": "processes_children_data",
+      "evidence": "Representative-consent records",
+      "is_dpia_trigger": true,
+      "remediation": "Implement representative-consent capture for minors/incapable persons."
+    },
+    {
+      "id": "H-01",
+      "cluster": "Transborder Flow",
+      "legal_anchor": {
+        "act_section": "s.31, s.32",
+        "regulation": "Reg 20"
+      },
+      "requirement": "Data not transferred outside Tanzania without a lawful basis \u2014 adequacy, transfer permit (Form 7), or s.32(4) exception.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "transfers_abroad",
+      "evidence": "Form 8 permit or documented adequacy/exception",
+      "is_dpia_trigger": false,
+      "remediation": "Apply for a transfer permit (Form 7) or document the adequacy/exception basis before any cross-border transfer."
+    },
+    {
+      "id": "H-02",
+      "cluster": "Transborder Flow",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 22"
+      },
+      "requirement": "Where a permit is issued, transfer conditions (authorized recipient, purpose limitation, no onward transfer) honoured.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "transfers_abroad",
+      "evidence": "Compliance with permit conditions",
+      "is_dpia_trigger": false,
+      "remediation": "Enforce permit conditions in transfer agreements and operations."
+    },
+    {
+      "id": "I-01",
+      "cluster": "DPIA",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 33(1)-(2)"
+      },
+      "requirement": "Before processing likely to affect rights/freedoms, a DPIA (Form 9) must be conducted.",
+      "severity": 4,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "dpia_required",
+      "evidence": "Completed Form 9 DPIA(s)",
+      "is_dpia_trigger": false,
+      "remediation": "Conduct a Form 9 DPIA for each triggering activity."
+    },
+    {
+      "id": "I-02",
+      "cluster": "DPIA",
+      "legal_anchor": {
+        "act_section": null,
+        "regulation": "Reg 34(1)"
+      },
+      "requirement": "Where the DPIA indicates likely impact, the controller requests PDPC instructions, attaching the report.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.3,
+      "applies_to": "dpia_required",
+      "evidence": "PDPC submission record",
+      "is_dpia_trigger": false,
+      "remediation": "Submit high-impact DPIA results to the PDPC and observe Reg 34 timelines."
+    },
+    {
+      "id": "J-01",
+      "cluster": "Accountability",
+      "legal_anchor": {
+        "act_section": "s.65(1)-(2)",
+        "regulation": null
+      },
+      "requirement": "Every controller must draw up a code of ethics / data-protection policy and submit it to the PDPC for approval.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Written policy + PDPC submission",
+      "is_dpia_trigger": false,
+      "remediation": "Draft a data-protection code of ethics/policy and submit to the PDPC for approval."
+    },
+    {
+      "id": "J-02",
+      "cluster": "Accountability",
+      "legal_anchor": {
+        "act_section": "s.5",
+        "regulation": "Reg 23"
+      },
+      "requirement": "Org maintains records of processing activities (categories, purposes) to demonstrate accountability.",
+      "severity": 3,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Processing register / ROPA",
+      "is_dpia_trigger": false,
+      "remediation": "Build and maintain a record of processing activities."
+    },
+    {
+      "id": "J-03",
+      "cluster": "Accountability",
+      "legal_anchor": {
+        "act_section": "s.27",
+        "regulation": "Reg 27(d)"
+      },
+      "requirement": "Staff handling personal data trained to handle it responsibly.",
+      "severity": 2,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "all",
+      "evidence": "Training records",
+      "is_dpia_trigger": false,
+      "remediation": "Run periodic data-protection awareness training."
+    },
+    {
+      "id": "J-04",
+      "cluster": "Accountability",
+      "legal_anchor": {
+        "act_section": "s.21",
+        "regulation": null
+      },
+      "requirement": "Public institutions deemed registered on commencement but must still comply fully.",
+      "severity": 2,
+      "sensitivity_multiplier": 1.0,
+      "applies_to": "is_public_institution",
+      "evidence": "Compliance despite deemed registration",
+      "is_dpia_trigger": false,
+      "remediation": "For public bodies \u2014 confirm deemed-registration status and ensure full substantive compliance."
+    }
+  ]
+}

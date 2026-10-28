@@ -1,0 +1,16 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.small { padding: 2px 7px; font-size: 0.68rem; }
+
+.compliant      { background: var(--compliant-bg);    color: var(--compliant-text); }
+.partial        { background: var(--partial-bg);      color: var(--partial-text); }
+.non-compliant  { background: var(--noncompliant-bg); color: var(--noncompliant-text); }
+.review-required { background: var(--review-bg);     color: var(--review-text); }

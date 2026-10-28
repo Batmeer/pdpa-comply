@@ -1,0 +1,35 @@
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.option {
+  flex: 1;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--card);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: var(--font);
+}
+.option:hover:not(.selected) { border-color: rgba(0,0,0,0.22); color: var(--text); }
+
+.icon { width: 22px; height: 22px; }
+.icon svg { width: 100%; height: 100%; }
+.label { white-space: nowrap; }
+
+/* Selected states */
+.YES.selected    { background: var(--compliant-bg);    border-color: var(--compliant-fg);   color: var(--compliant-text); }
+.PARTIALLY.selected { background: var(--partial-bg);   border-color: var(--partial-fg);     color: var(--partial-text);   }
+.NO.selected     { background: var(--noncompliant-bg); border-color: var(--noncompliant-fg); color: var(--noncompliant-text); }
+.NA.selected     { background: var(--review-bg);       border-color: var(--review-fg);      color: var(--review-text);    }

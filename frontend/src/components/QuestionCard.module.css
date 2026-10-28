@@ -1,0 +1,61 @@
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.question {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--card);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  white-space: nowrap;
+}
+.pill:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+/* Selected states */
+.pill.selected.yes {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+.pill.selected.partially {
+  background: var(--partial-bg);
+  border-color: var(--partial-fg);
+  color: var(--partial-text);
+}
+.pill.selected.no {
+  background: var(--noncompliant-bg);
+  border-color: var(--noncompliant-fg);
+  color: var(--noncompliant-text);
+}
+.pill.selected.na {
+  background: var(--review-bg);
+  border-color: var(--review-fg);
+  color: var(--review-text);
+}
